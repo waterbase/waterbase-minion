@@ -4,6 +4,7 @@ var serverManager = require('../manage/serverManager.js');
 
 module.exports = function(callback){
   serverManager.getConfig(function(serverConfig){
+    console.log('>>>>>> retrieed serverConfig', serverConfig);
     var databaseConnection = mongoose.createConnection(
       env.mongoHost + serverConfig.name,
       { db: { safe:true } });
@@ -11,10 +12,11 @@ module.exports = function(callback){
     databaseConnection.once('open', function(){
       var resources = serverConfig.resources;
 
-      console.log(' Server ++++++ database connection opened ');
+      console.log('++++++ database connection opened ');
 
-      for (var resourceName in resources.attributes){
-        databaseConnection.model(resourceName, resources.attributes[resourceName]);
+      for (var resourceName in resources){
+        console.log('@@@@@@ model', resourceName, resources[resourceName].attributes);
+        databaseConnection.model(resourceName, resources[resourceName].attributes);
       }
 
       callback(databaseConnection);

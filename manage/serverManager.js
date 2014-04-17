@@ -2,30 +2,17 @@ var request = require('request');
 var env = require('../env/env.js');
 
 var manager = {};
+var serverConfig;
 
 manager.getConfig = function(callback){  
-  callback({
-    name: 'living',
-    resources: {
-      animal:{
-        attributes: {
-          name: 'String',
-          type: 'String'
-        }
-      }
-    }
-  })
-
-  return;
-  request.get(env.masterUrl, function(err, resources){
-    calback(resources);
+  request.get(env.masterUrl, function(err, upstreamServerConfig){
+    serverConfig = upstreamServerConfig;
+    calback(serverConfig);
   })
 }
 
 manager.createResource = function(name, resource){
-  console.log('create resource');
-  return;
-  request.post(env.masterUrl, {
+  request.post(env.masterUrl+'/'+serverConfig._id, {
     name: name,
     attributes: resource
   }, function(err, resources){
@@ -34,9 +21,7 @@ manager.createResource = function(name, resource){
 }
 
 manager.updateResource = function(name, resource){
-  console.log('update resource');
-  return;
-  request.put(env.masterUrl, {
+  request.put(env.masterUrl+'/'+serverConfig._id, {
     name: name,
     attributes: resource
   }, function(err, resources){

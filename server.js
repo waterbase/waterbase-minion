@@ -2,13 +2,13 @@ var express = require('express');
 var env = require('./env/env.js');
 var ControllerSet = require('./config/ControllerSet.js');
 var Sockets = require('./config/Socket');
+
 require('./config/createDatabase.js')(function(databaseConnection){
   var controllers = new ControllerSet(databaseConnection);
   //creating express app
   var app = express();
   require('./config/middlewareMixin.js')(app);
   require('./config/routesMixin.js')(app, controllers);
-  require('./config/adminRoutesMixin.js')(app);
 
   var io = new Sockets(databaseConnection, controllers);
 
@@ -17,4 +17,6 @@ require('./config/createDatabase.js')(function(databaseConnection){
   });
 
   io.listen(server);
+
+  module.exports.server = server;
 });

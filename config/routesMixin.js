@@ -13,10 +13,10 @@ var responder = function(code, res){
       console.trace('sending err', err);
       return res.send(statusCodes.error, err);
     } else if (!data) {
-      console.log('sending 404');
+      console.log('<<<<<< sending 404');
       return res.send(statusCodes.notFound);
     }
-    console.log('responding', code);
+    console.log('<<<<<< responding', code);
     res.send(code, data);
   };
 };

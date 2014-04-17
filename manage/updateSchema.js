@@ -1,4 +1,8 @@
+var Schema = require('mongoose').Schema;
+var serverManager = require('./serverManager.js');
+
 var extractAttributes = function(data, names){
+  console.log('^^^^^^ extracting from ', data);
   var attributes = {};
   for (var key in data){
     var type = Array.isArray(data[key])? 'array' : typeof data[key];
@@ -19,45 +23,42 @@ var extractAttributes = function(data, names){
       attributes[key] = type.charAt(0).toUpperCase() + type.slice(1);
     }
   }
+  console.log('^^^^^^ extracted results ', attributes);
   return attributes;
 };
 
-var updateAttributes = function(db, collectionName, resource){
+var updateAttributes = function(db, collectionName, attributes){
   var schema = db.model(collectionName).schema;
   var existingAttributes = Object.keys(schema.paths);
+  console.log('>>>>>> updating ', collectionName, attributes, ' vs original ', existingAttributes);
 
   var newAttributes = {};
-  for (var attribute in resource.attributes){
-    if (existingAttributes.indexOf(resource.attributes[attribute]) === -1){
-      newAttributes[attribute] = resource.attributes[attribute];
+  for (var attribute in attributes){
+    if (existingAttributes.indexOf(attributes[attribute]) === -1){
+      newAttributes[attribute] = attributes[attribute];
     }
   }
   schema.add(newAttributes);
-}
+  serverManager.updateResource(collectionName, attributes);
+};
 
-var serverManager = require('./serverManager.js');
+var createResource = function(db, collectionName, schema){
+  console.log('>>>>>> creating ', collectionName, schema);
+  db.model(collectionName, new Schema(schema));
+  serverManager.createResource(collectionName, schema);
+};
 
-module.exports = function(db, collectionName, data){
+module.exports = function(db, collectionName, data, callback){
   var names = Object.keys(db.models);
+  console.log('>>>>>> requesting ', collectionName, ' with ', data);
 
   for (var i = 0, length = names.length; i < length; i++) {
     if (names[i] === collectionName) {
-      //the collection already exists
-      //check if there are new attributes
-      updateAttributes(db, collectionName, {
-        attributes: extractAttributes(data, names)
-      });
-      return;
+      updateAttributes(db, collectionName, extractAttributes(data, names));
+      return callback();
     }
   }
 
-  var schema = extractAttributes(data, names)
-
-  db.model(collectionName, new Schema(schema));
-
-  serverManager.createResource(collectionName, {
-    attributes: schema
-  });
-
-  return;
+  createResource(db, collectionName, extractAttributes(data, names));
+  return callback();
 };
