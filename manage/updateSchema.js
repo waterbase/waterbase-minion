@@ -9,6 +9,7 @@ var extractAttributes = function(data, names){
     if (type === 'object'){
       //if a field is non-array object,
       //see if it can be a reference field
+      console.log('!!!!!! possible reference type', key, names);
       if (names.indexOf(key) !== -1){
         type = {
           type: Schema.Types.ObjectId,
@@ -18,6 +19,7 @@ var extractAttributes = function(data, names){
         //otherwise give it a free-form type
         type = {};
       }
+      attributes[key] = type;
     } else {
       //native type, capitalize the first letter
       attributes[key] = type.charAt(0).toUpperCase() + type.slice(1);
