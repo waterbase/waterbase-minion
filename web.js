@@ -1,8 +1,10 @@
+console.log('-----------------START');
 var express = require('express');
 var env = require('./env/env.js');
 var ControllerSet = require('./controllers/ControllerSet.js');
 var Sockets = require('./config/Socket');
 var upstreamManager = require('./controllers/upstreamManager.js');
+
 
 upstreamManager.getConfig(function(serverConfig){
   console.log('serverConfig retrieved', serverConfig);
