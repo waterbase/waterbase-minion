@@ -5,6 +5,7 @@ module.exports = function(serverConfig, callback){
   console.log('~~~~~~ connecting to', serverConfig);
   var databaseUri = serverConfig.databaseUri || 
     ('mongodb://localhost:27017/' + serverConfig.name);
+  console.log('actual', databaseUri);
   var databaseConnection = mongoose.createConnection(databaseUri, { 
     db: { safe:true } 
   });
