@@ -9,10 +9,12 @@ module.exports = function(app, databaseConnection){
   app.post('/api/user', function(req, res){
     authService.create(req.body, function(err, user){
       if (err) {
+        console.log(err, req.body);
         return res.send(400, err);
       }
       authService.login(user, function(err, profile){
         if (err) {
+          console.log(err);
           return res.send(500, err);
         }
         res.send(profile);
@@ -20,9 +22,10 @@ module.exports = function(app, databaseConnection){
     })
   });
 
-  app.get('/api/user/:id', function(){
+  app.get('/api/user/:id', function(req, res){
     authService.show(req.params.id, function(err, profile){
       if (err) {
+        console.log(err);
         return res.send(500, err);
       } else if (!profile) {
         return res.send(404);
@@ -38,6 +41,7 @@ module.exports = function(app, databaseConnection){
     var newPass = String(req.body.newPassword);
     authService.changePassword(userId, oldPass, newPass, function(err, authorized){
       if (err){
+        console.log(err);
         return res.send(500);
       } else if (!authorized){
         return res.send(401);
@@ -48,9 +52,10 @@ module.exports = function(app, databaseConnection){
   });
 
   //login and logout
-  app.post('/api/session', function(req, res){
-    authService.login(req, function(err, authorized, data){
+  app.post('/api/session', function(req, res, next){
+    authService.login(req, res, next, function(err, authorized, data){
       if (err){
+        console.log(err);
         return res.send(500);
       } else if (!authorized){
         return res.send(401);

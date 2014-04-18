@@ -1,4 +1,3 @@
-var request = require('request');
 var expect = require('expect.js');
 var request = require('supertest');
 var host = 'http://localhost:12345'

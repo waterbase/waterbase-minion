@@ -1,14 +1,9 @@
 /* global require, module */
 var express = require('express');
-var passport = require('passport');
 var mongoStore = require('connect-mongo')(express);
 var env = require('../env/env');
 
-var accessRoles = {
-
-};
-
-module.exports = function(app, databaseUri) {
+module.exports = function(app, databaseUri, passport) {
   app.use(express.logger('dev'));
   app.use(express.json());
   app.use(express.urlencoded());

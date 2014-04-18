@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 
 module.exports = function(databaseConnection){
+  var User = databaseConnection.model('user');
   var service = {};
   service.create = function (info, callback) {
     var newUser = new User(info);
@@ -38,9 +39,9 @@ module.exports = function(databaseConnection){
     });
   };
 
-  service.login = function (req, callback) {
+  service.login = function (req, res, next, callback) {
     passport.authenticate('local', function(err, user, info) {
-      if (error || info) {
+      if (err || info) {
         callback(err, !info)
       }
       req.logIn(user, function(err) {

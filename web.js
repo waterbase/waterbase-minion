@@ -8,11 +8,12 @@ upstreamManager.getConfig(function(serverConfig){
   console.log('serverConfig retrieved', serverConfig);
   require('./config/createDatabase.js')(serverConfig, function(databaseConnection, databaseUri){
     var controllers = new ControllerSet(databaseConnection);
+    var passport = require('./controllers/passport')(databaseConnection);
     //creating express app
     var app = express();
-    require('./config/middlewareMixin.js')(app, databaseUri);
-    require('./config/routesMixin.js')(app, controllers);
+    require('./config/middlewareMixin.js')(app, databaseUri, passport);
     require('./config/authRoutesMixin.js')(app, databaseConnection);
+    require('./config/routesMixin.js')(app, controllers);
 
     var io = new Sockets(databaseConnection, controllers);
 
