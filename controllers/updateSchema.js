@@ -1,5 +1,5 @@
 var Schema = require('mongoose').Schema;
-var serverManager = require('./serverManager.js');
+var serverManager = require('./upstreamManager.js');
 
 var extractAttributes = function(data, names){
   console.log('^^^^^^ extracting from ', data);

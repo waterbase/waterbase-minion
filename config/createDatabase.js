@@ -1,25 +1,33 @@
 var mongoose = require('mongoose');
 var env = require('../env/env.js');
-var serverManager = require('../manage/serverManager.js');
 
-module.exports = function(callback){
-  serverManager.getConfig(function(serverConfig){
-    console.log('>>>>>> retrieed serverConfig', serverConfig);
-    var databaseConnection = mongoose.createConnection(
-      env.mongoHost + serverConfig.name,
-      { db: { safe:true } });
+module.exports = function(serverConfig, callback){
+  var databaseUri = serverConfig.databaseUri || 
+    ('mongodb://localhost:27017/' + serverConfig.name);
+  var databaseConnection = mongoose.createConnection(databaseUri, { 
+    db: { safe:true } 
+  });
 
-    databaseConnection.once('open', function(){
-      var resources = serverConfig.resources;
+  console.log(' oooooo waiting for database opening ', databaseUri);
 
-      console.log('++++++ database connection opened ');
+  databaseConnection.once('open', function(){
+    var resources = serverConfig.resources;
 
-      for (var resourceName in resources){
+    console.log('++++++ database connection opened ');
+    
+    databaseConnection.model('user', require('../models/User'));
+
+    for (var resourceName in resources){
+      if (resourceName !== 'User'){
         console.log('@@@@@@ model', resourceName, resources[resourceName].attributes);
         databaseConnection.model(resourceName, resources[resourceName].attributes);
       }
+    }
 
-      callback(databaseConnection);
-    });
+    console.log('db init completed', 
+      Object.keys(databaseConnection.models), 
+      Object.keys(databaseConnection.collections));
+
+    callback(databaseConnection, databaseUri);
   });
 }

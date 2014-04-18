@@ -1,4 +1,5 @@
 /* global module */
+var auth = require('../controllers/authorize');
 var statusCodes = {
   ok: 200,
   created: 201,
@@ -23,14 +24,14 @@ var responder = function(code, res){
 
 module.exports = function(app, controllers) {
   //collection
-  app.get('/:collection', function(req, res){
+  app.get('/:collection', auth, function(req, res){
     controllers.retrieveAll(
       req.params.collection,
       responder(statusCodes.ok, res));
   });
 
   //update all documents
-  app.put('/:collection', function(req, res){
+  app.put('/:collection', auth, function(req, res){
     controllers.updateAll(
       req.params.collection,
       req.body.where,
@@ -39,14 +40,14 @@ module.exports = function(app, controllers) {
   });
 
   //delete all documents
-  app.del('/:collection', function(req, res){
+  app.del('/:collection', auth, function(req, res){
     controllers.deleteAll(
       req.params.collection,
       responder(statusCodes.finished, res));
   });
 
   //create document
-  app.post('/:collection', function(req, res){
+  app.post('/:collection', auth, function(req, res){
     controllers.create(
       req.params.collection,
       req.body,
@@ -54,7 +55,7 @@ module.exports = function(app, controllers) {
   });
 
   //document
-  app.get('/:collection/:id', function(req, res){
+  app.get('/:collection/:id', auth, function(req, res){
     controllers.retrieveOne(
       req.params.collection,
       req.params.id,
@@ -62,7 +63,7 @@ module.exports = function(app, controllers) {
   });
 
   //update document
-  app.put('/:collection/:id', function(req, res){
+  app.put('/:collection/:id', auth, function(req, res){
     controllers.updateOne(
       req.params.collection,
       req.params.id,
@@ -71,7 +72,7 @@ module.exports = function(app, controllers) {
   });
 
   //delete document
-  app.del('/:collection/:id', function(req, res){
+  app.del('/:collection/:id', auth, function(req, res){
     controllers.deleteOne(
       req.params.collection,
       req.params.id,

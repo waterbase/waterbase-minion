@@ -1,7 +1,7 @@
 /* global require, module */
-var updateSchema = require('../manage/updateSchema.js');
+var updateSchema = require('./updateSchema.js');
 var Schema = require('mongoose').Schema;
-var serverManager = require('../manage/serverManager.js');
+var serverManager = require('./upstreamManager.js');
 
 //
 var statusCodes = {
