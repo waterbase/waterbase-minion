@@ -1,6 +1,5 @@
 var upstreamManager = require('./upstreamManager');
 module.exports = function (req, res, next) {
-  console.log('authorizing ', req.params.collection);
   var config = upstreamManager.serverConfig.resources[req.params.collection]; 
   if (!config){
     //new resources default to accessible by all
