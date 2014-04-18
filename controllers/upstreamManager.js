@@ -15,7 +15,7 @@ manager.getPermissions = function(){
 }
 
 manager.getConfig = function(callback){  
-  request.get(env.masterUrl, function(err, res, upstreamServerConfig){
+  request.get(env.masterUrl+'/'+process.env.SERVER_ID, function(err, res, upstreamServerConfig){
     if (!err && res.statusCode === 200){
       manager.serverConfig = upstreamServerConfig || manager.serverConfig;
     } else {
@@ -26,7 +26,7 @@ manager.getConfig = function(callback){
 }
 
 manager.createResource = function(name, resource){
-  request.post(env.masterUrl+'/'+manager.serverConfig._id, {
+  request.post(env.masterUrl+'/'+process.env.SERVER_ID, {
     name: name,
     attributes: resource
   }, function(err, resources){
@@ -37,7 +37,7 @@ manager.createResource = function(name, resource){
 }
 
 manager.updateResource = function(name, resource){
-  request.put(env.masterUrl+'/'+manager.serverConfig._id, {
+  request.put(env.masterUrl+'/'+process.env.SERVER_ID, {
     name: name,
     attributes: resource
   }, function(err, resources){
