@@ -2,7 +2,7 @@
  * Module Dependencies
  */
 
-var ControllerSet = require('./ControllerSet.js');
+var ControllerSet = require('../controllers/ControllerSet.js');
 var socketServer = require('socket.io');
 
 /**

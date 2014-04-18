@@ -1,22 +1,27 @@
 var express = require('express');
 var env = require('./env/env.js');
-var ControllerSet = require('./config/ControllerSet.js');
+var ControllerSet = require('./controllers/ControllerSet.js');
 var Sockets = require('./config/Socket');
+var upstreamManager = require('./controllers/upstreamManager.js');
 
-require('./config/createDatabase.js')(function(databaseConnection){
-  var controllers = new ControllerSet(databaseConnection);
-  //creating express app
-  var app = express();
-  require('./config/middlewareMixin.js')(app);
-  require('./config/routesMixin.js')(app, controllers);
+upstreamManager.getConfig(function(serverConfig){
+  console.log('serverConfig retrieved', serverConfig);
+  require('./config/createDatabase.js')(serverConfig, function(databaseConnection, databaseUri){
+    var controllers = new ControllerSet(databaseConnection);
+    //creating express app
+    var app = express();
+    require('./config/middlewareMixin.js')(app, databaseUri);
+    require('./config/routesMixin.js')(app, controllers);
+    require('./config/authRoutesMixin.js')(app, databaseConnection);
 
-  var io = new Sockets(databaseConnection, controllers);
+    var io = new Sockets(databaseConnection, controllers);
 
-  var server = app.listen(env.port, function () {
-    console.log(' Server ++++++ Server started on', env.port);
+    var server = app.listen(env.port, function () {
+      console.log(' Server ++++++ Server started on', env.port);
+    });
+
+    io.listen(server);
+
+    module.exports.server = server;
   });
-
-  io.listen(server);
-
-  module.exports.server = server;
 });
