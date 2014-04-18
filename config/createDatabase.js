@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var env = require('../env/env.js');
 
 module.exports = function(serverConfig, callback){
+  console.log('~~~~~~ connecting to', serverConfig);
   var databaseUri = serverConfig.databaseUri || 
     ('mongodb://localhost:27017/' + serverConfig.name);
   var databaseConnection = mongoose.createConnection(databaseUri, { 

@@ -17,14 +17,14 @@ manager.getPermissions = function(){
 manager.getConfig = function(callback){  
   console.log('trying to get config');
   request.get(env.masterUrl+'/'+process.env.SERVER_ID, function(err, res, upstreamServerConfig){
-    console.log('got config', upstreamServerConfig.databaseUri);
+    console.log('got config', upstreamServerConfig);
     if (!err && res.statusCode === 200){
       manager.serverConfig = upstreamServerConfig || manager.serverConfig;
     } else {
       console.log('error:', err, res.statusCode, 'config:', upstreamServerConfig);
     }
     callback(manager.serverConfig);
-  })
+  });
 }
 
 manager.createResource = function(name, resource){
