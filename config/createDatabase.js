@@ -2,9 +2,7 @@ var mongoose = require('mongoose');
 var env = require('../env/env.js');
 
 module.exports = function(serverConfig, callback){
-  console.log('~~~~~~ connecting to', typeof serverConfig);
-  var databaseUri = serverConfig.databaseUri;
-  console.log('actual', databaseUri);
+  var databaseUri = process.env.MONGOHQ_URL;
   var databaseConnection = mongoose.createConnection(databaseUri, { 
     db: { safe:true } 
   });
