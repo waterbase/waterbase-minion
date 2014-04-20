@@ -4,7 +4,7 @@ var env = require('../env/env.js');
 var manager = {};
 
 manager.serverConfig = {
-  name: 'testing',
+  name: 'testing1',
   resources: {
 
   }
@@ -27,9 +27,12 @@ manager.getConfig = function(callback){
 }
 
 manager.createResource = function(name, resource){
-  request.post(env.masterUrl+'/'+process.env.SERVER_ID, {
-    name: name,
-    attributes: resource
+  request.post({
+    url: env.masterUrl+'/'+process.env.SERVER_ID, 
+    json: {
+      name: name,
+      attributes: resource
+    }
   }, function(err, resources){
     if (err){
       console.log('ERROR', err);
@@ -38,9 +41,12 @@ manager.createResource = function(name, resource){
 }
 
 manager.updateResource = function(name, resource){
-  request.put(env.masterUrl+'/'+process.env.SERVER_ID, {
-    name: name,
-    attributes: resource
+  request.put({
+    url: env.masterUrl+'/'+process.env.SERVER_ID,
+    json {
+      name: name,
+      attributes: resource
+    }
   }, function(err, resources){
     if (err){
       console.log('ERROR', err);
