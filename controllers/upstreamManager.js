@@ -43,7 +43,7 @@ manager.createResource = function(name, resource){
 manager.updateResource = function(name, resource){
   request.put({
     url: env.masterUrl+'/'+process.env.SERVER_ID,
-    json {
+    json: {
       name: name,
       attributes: resource
     }
