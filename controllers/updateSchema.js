@@ -9,8 +9,12 @@ var extractAttributes = function(data, names){
     if (type === 'object'){
       //if a field is non-array object,
       //see if it can be a reference field
-      console.log('!!!!!! possible reference type', key, names);
-      if (names.indexOf(key) !== -1){
+      if (~names.indexOf(key) && false){ //turned off
+        //TODO implement saving reference types
+        //it is ambigous to update a reference type
+        //whether the intention is to update the referenced document
+        //or to change the reference to another document
+        console.log(' @@@@@@ reference type', key, names);
         type = {
           type: Schema.Types.ObjectId,
           ref: key
