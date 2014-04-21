@@ -5,7 +5,6 @@ var ControllerSet = require('./controllers/ControllerSet.js');
 var Sockets = require('./config/Socket');
 var upstreamManager = require('./controllers/upstreamManager.js');
 
-
 upstreamManager.getConfig(function(serverConfig){
   console.log('serverConfig retrieved', serverConfig);
   require('./config/createDatabase.js')(serverConfig, function(databaseConnection, databaseUri){
@@ -14,7 +13,7 @@ upstreamManager.getConfig(function(serverConfig){
     //creating express app
     var app = express();
     require('./config/middlewareMixin.js')(app, databaseUri, passport);
-    require('./config/authRoutesMixin.js')(app, databaseConnection);
+    require('./config/authRoutesMixin.js')(app, databaseConnection, passport);
     require('./config/routesMixin.js')(app, controllers);
 
     var io = new Sockets(databaseConnection, controllers);
@@ -24,6 +23,8 @@ upstreamManager.getConfig(function(serverConfig){
     });
 
     io.listen(server);
+
+    console.log('server start complete')
 
     module.exports.server = server;
   });

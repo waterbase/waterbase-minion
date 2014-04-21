@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var env = require('../env/env.js');
 
 module.exports = function(serverConfig, callback){
-  var databaseUri = process.env.MONGOHQ_URL;
+  var databaseUri = process.env.MONGOHQ_URL || 'mongodb://localhost/'+serverConfig.name;
   var databaseConnection = mongoose.createConnection(databaseUri, { 
     db: { safe:true } 
   });
@@ -14,7 +14,8 @@ module.exports = function(serverConfig, callback){
 
     console.log('++++++ database connection opened ');
     
-    databaseConnection.model('user', require('../models/User'));
+    //create user model
+    require('../models/User')(databaseConnection, serverConfig);
 
     for (var resourceName in resources){
       if (resourceName !== 'User'){

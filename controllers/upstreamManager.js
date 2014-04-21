@@ -15,7 +15,9 @@ manager.getPermissions = function(){
 }
 
 manager.getConfig = function(callback){  
-  request.get(env.masterUrl+'/'+process.env.SERVER_ID, function(err, res, upstreamServerConfig){
+  request.get(
+    env.masterUrl+'/'+process.env.SERVER_ID, 
+  function(err, res, upstreamServerConfig){
     upstreamServerConfig = JSON.parse(upstreamServerConfig);
     if (!err && res.statusCode === 200){
       manager.serverConfig = upstreamServerConfig || manager.serverConfig;

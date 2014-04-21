@@ -6,10 +6,7 @@ var mongoose = require('mongoose'),
 
 var authTypes = ['github', 'twitter', 'facebook', 'google'];
 
-/**
- * User Schema
- */
-var UserSchema = new Schema({
+var userJson = {
   username: String,
   email: String,
   role: {
@@ -23,7 +20,11 @@ var UserSchema = new Schema({
   twitter: {},
   github: {},
   google: {}
-});
+}
+/**
+ * User Schema
+ */
+var UserSchema = new Schema(userJson);
 
 /**
  * Virtuals
@@ -31,6 +32,7 @@ var UserSchema = new Schema({
 UserSchema
   .virtual('password')
   .set(function(password) {
+    console.log('virtual changing password');
     this._password = password;
     this.salt = this.makeSalt();
     this.hashedPassword = this.encryptPassword(password);
@@ -167,4 +169,10 @@ UserSchema.methods = {
   }
 };
 
-module.exports = UserSchema;
+module.exports = function(databaseConnection, serverConfig){
+  if (!serverConfig.resources['user']){
+    serverConfig.resources['user'] = userJson;
+  }
+  databaseConnection.model('user', UserSchema);
+}
+

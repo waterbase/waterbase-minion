@@ -25,6 +25,7 @@ var responder = function(code, res){
 module.exports = function(app, controllers) {
   //collection
   app.get('/:collection', auth, function(req, res){
+    console.log(' ====== API', req.url, 'get all', req.params.collection);
     controllers.retrieveAll(
       req.params.collection,
       responder(statusCodes.ok, res));
@@ -32,6 +33,7 @@ module.exports = function(app, controllers) {
 
   //update all documents
   app.put('/:collection', auth, function(req, res){
+    console.log(' ====== API', req.url, 'put all', req.params.collection);
     controllers.updateAll(
       req.params.collection,
       req.body.where,
@@ -41,6 +43,7 @@ module.exports = function(app, controllers) {
 
   //delete all documents
   app.del('/:collection', auth, function(req, res){
+    console.log(' ====== API', req.url, 'delete all', req.params.collection);
     controllers.deleteAll(
       req.params.collection,
       responder(statusCodes.finished, res));
@@ -48,6 +51,7 @@ module.exports = function(app, controllers) {
 
   //create document
   app.post('/:collection', auth, function(req, res){
+    console.log(' ====== API', req.url, 'create', req.params.collection);
     controllers.create(
       req.params.collection,
       req.body,
@@ -56,6 +60,7 @@ module.exports = function(app, controllers) {
 
   //document
   app.get('/:collection/:id', auth, function(req, res){
+    console.log(' ====== API', req.url, 'get one', req.params.collection);
     controllers.retrieveOne(
       req.params.collection,
       req.params.id,
@@ -64,6 +69,7 @@ module.exports = function(app, controllers) {
 
   //update document
   app.put('/:collection/:id', auth, function(req, res){
+    console.log(' ====== API', req.url, 'put one', req.params.collection);
     controllers.updateOne(
       req.params.collection,
       req.params.id,
@@ -73,6 +79,7 @@ module.exports = function(app, controllers) {
 
   //delete document
   app.del('/:collection/:id', auth, function(req, res){
+    console.log(' ====== API', req.url, 'delete one', req.params.collection);
     controllers.deleteOne(
       req.params.collection,
       req.params.id,
@@ -81,7 +88,7 @@ module.exports = function(app, controllers) {
 
   // All undefined api routes should return a 404
   app.get('/*', function(req, res) {
-    console.log('not in route');
+    console.log('not in route', req.url);
     res.send(404);
   });
 };

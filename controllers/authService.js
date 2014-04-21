@@ -18,7 +18,7 @@ module.exports = function(databaseConnection){
         return callback(err, null);
       }
       callback(null, {
-        id: user._id,
+        _id: user._id,
         email: user.email,
         role: user.role,
         provider: user.provider
@@ -37,25 +37,6 @@ module.exports = function(databaseConnection){
         callback(null, false);
       }
     });
-  };
-
-  service.login = function (req, res, next, callback) {
-    passport.authenticate('local', function(err, user, info) {
-      if (err || info) {
-        callback(err, !info)
-      }
-      req.logIn(user, function(err) {
-        if (err) {
-          return callback(err);
-        }
-        callback(null, true, {
-          id: req.user._id,
-          email: req.user.email,
-          role: req.user.role,
-          provider: req.user.provider
-        });
-      });
-    })(req, res, next);
   };
 
   return service;

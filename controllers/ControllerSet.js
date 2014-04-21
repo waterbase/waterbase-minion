@@ -32,7 +32,7 @@ module.exports = function (db) {
 
   this.updateAll = function (collectionName, where, set, callback) {
     updateSchema(db, collectionName, set, function(err){
-      console.log('~~~~~~ update all');
+      console.log('~~~~~~ update all', collectionName);
       if (err){
         callback(err);
       }
@@ -49,7 +49,7 @@ module.exports = function (db) {
 
   this.deleteAll = function (collectionName, callback) {
     updateSchema(db, collectionName, {}, function(err){
-      console.log('~~~~~~ delete all');
+      console.log('~~~~~~ delete all', collectionName);
       if (err){
         callback(err);
       }
@@ -67,7 +67,7 @@ module.exports = function (db) {
   //create element
   this.create = function (collectionName, data, callback) {
     updateSchema(db, collectionName, data, function(err){
-      console.log('~~~~~~ create');
+      console.log('~~~~~~ create', collectionName);
       if (err){
         console.log(err);
         callback(err);
@@ -85,7 +85,7 @@ module.exports = function (db) {
   //document
   this.retrieveOne = function (collectionName, id, callback) {
     updateSchema(db, collectionName, {}, function(err){
-      console.log('~~~~~~ show');
+      console.log('~~~~~~ show', collectionName);
       if (err){
         callback(err);
       }
@@ -103,7 +103,7 @@ module.exports = function (db) {
   //update single document
   this.updateOne = function (collectionName, id, set, callback) {
     updateSchema(db, collectionName, set, function(err){
-      console.log('~~~~~~ update one');
+      console.log('~~~~~~ update one', collectionName);
       if (err){
         callback(err);
       }
@@ -121,7 +121,7 @@ module.exports = function (db) {
   //delete single document
   this.deleteOne = function (collectionName, id, callback) {
     updateSchema(db, collectionName, {}, function(err){
-      console.log('~~~~~~ delete one');
+      console.log('~~~~~~ delete one', collectionName);
       if (err){
          callback(err);
       }
