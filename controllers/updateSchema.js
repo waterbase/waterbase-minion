@@ -40,8 +40,10 @@ var updateAttributes = function(db, collectionName, attributes){
       newAttributes[attribute] = attributes[attribute];
     }
   }
-  schema.add(newAttributes);
-  serverManager.updateResource(collectionName, attributes);
+  if (Object.keys(newAttributes).length){
+    schema.add(newAttributes);
+    serverManager.updateResource(collectionName, attributes);
+  }
 };
 
 var createResource = function(db, collectionName, schema){
