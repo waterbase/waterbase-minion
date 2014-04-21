@@ -82,11 +82,13 @@ Socket.prototype.init = function() {
    * Broadcasts global event to all clients
    *
    * @param {Event} Specify event type
+   * @param {String} Name of collection
    * @param {Object} data regarding event
    */
 
-  Socket.prototype.broadcast = function(event, data) {
-    this.io.sockets.emit('broadcast', event, data);
+  Socket.prototype.broadcast = function(event, collectionName, data) {
+    console.log('Broadcast ' + event + ' in ' + collectionName);
+    this.io.sockets.emit(event, collectionName, data);
   };
 
   /**
@@ -97,7 +99,7 @@ Socket.prototype.init = function() {
    * @param {event} Event to be broadcasted to clients
    */
 
-  Socket.prototype.handleRequest = function(callback, event) {
+  Socket.prototype.handleRequest = function(callback, event, collectionName) {
     var context = this;
 
     return function (err, data) {
@@ -105,7 +107,7 @@ Socket.prototype.init = function() {
 
       if (event) {
         var results = [];
-        context.broadcast(event, results.concat(data));
+        context.broadcast(event, collectionName, results.concat(data));
       }
     };
   };
@@ -133,7 +135,7 @@ Socket.prototype.create = function(collectionName, set, callback) {
   this.controllers.create(
     collectionName,
     set,
-    this.handleRequest(callback, 'create')
+    this.handleRequest(callback, 'create', collectionName)
   );
 };
 
@@ -142,14 +144,14 @@ Socket.prototype.update = function(collectionName, where, set, callback) {
     collectionName,
     where,
     set,
-    this.handleRequest(callback, 'update')
+    this.handleRequest(callback, 'update', collectionName)
   );
 };
 
 Socket.prototype.deleteAll = function(collectionName, callback) {
   this.controllers.deleteAll(
     collectionName,
-    this.handleRequest(callback, 'deleteAll')
+    this.handleRequest(callback, 'deleteAll', collectionName)
   );
 };
 
@@ -158,7 +160,7 @@ Socket.prototype.updateOne = function(collectionName, id, set, callback) {
     collectionName,
     id,
     set,
-    this.handleRequest(callback, 'update')
+    this.handleRequest(callback, 'update', collectionName)
   );
 };
 
@@ -166,6 +168,6 @@ Socket.prototype.deleteOne = function(collectionName, id, callback) {
   this.controllers.deleteOne(
     collectionName,
     id,
-    this.handleRequest(callback, 'deleteOne')
+    this.handleRequest(callback, 'deleteOne', collectionName)
   );
 };
